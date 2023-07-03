@@ -3,6 +3,7 @@
 ;[RANGE  ]: 行頭に選択範囲を移動
 ;[MOUSE  ]: 左下のエリアにフォーカスを移してNORMALモードに
 ;[SPECIAL]: ウィンドウリサイズ特殊キー (コンビネーションの場合はリマインド)
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $a::
     if (!mode(_MODE.NORMAL)) {
         if (mode(_MODE.EDIT)) {
@@ -21,14 +22,15 @@ $a::
             }
         }
     } else {
-        if (isSecondKey()) {
-            send {^}
-        } else {
+        if (isSecondKeyAfterCtrlJ()) {
+            Run, https://www.amazon.co.jp/         
+        } else if(isSecondKey()){
+            send {^} 
+        }else{
             send a
         }
     }
-return
-
+    return
 ;[All Mode]: Alt+a (Slack: Mentions & reactions)
 $!a::
     if (isActiveProcess("slack")) {
@@ -52,6 +54,7 @@ return
 ;[RANGE  ]: 選択範囲を1単語左に移動
 ;[MOUSE  ]: bキー
 ;[SPECIAL]: bキー
+#ifwinnotactive
 $b::
     if (mode(_MODE.NORMAL)) {
         send b
@@ -129,18 +132,17 @@ return
 ;[RANGE  ]: BSキー
 ;[MOUSE  ]: 右下のエリアにフォーカスを移してNORMALモードに
 ;[SPECIAL]: ウィンドウリサイズ特殊キー (コンビネーションの場合はリマインド)
+#ifwinnotactive,ahk_exe ffxiv_dx11.exe
 $d::
     if (mode(_MODE.NORMAL)) {
-        if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send {F15}
-            return
-        }
-        if (isSecondKey()) {
+       if(isSecondkeyafterCtrlJ()){
+       		Run, C:\Users\kuon\AppData\Local\Discord\Update.exe --processStart Discord.exe
+       		}else if (isSecondKey()){
             send {#}
-        } else {
-            send d
-        }
-    } else if (mode(_MODE.EDIT)) {
+            }else{
+                send d
+		}
+	} else if (mode(_MODE.EDIT)) {
         send {BS}
     } else if (mode(_MODE.RANGE)) {
         send {BS}
@@ -157,7 +159,6 @@ $d::
         }
     }
 return
-
 ;[NORMAL ]: Ctrl + dキー (Dynalist: トピック削除)
 ;[EDIT   ]: Ctrl + dキー (Dynalist: トピック削除)
 ;[RANGE  ]: Ctrl + dキー
@@ -226,6 +227,7 @@ $!d::
         setMode(_MODE.DEBUG)
     }
 return
+#ifwinnotactive
 
 ;[NORMAL ]: eキー (コンビネーションキーの場合は=) (ObsidianでCtrl+jのあとなら最近のファイルを開く) (ChromeでCtrl+jのあとならタブ検索)
 ;[EDIT   ]: 1つ戻る
@@ -251,7 +253,7 @@ $e::
         }
     } else {
         if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send {F14}
+            send {F13}
             return
         }
         if ((isActiveProcess("chrome") || isActiveProcess("sidekick")) && isSecondKeyAfterCtrlJ()) {
@@ -310,7 +312,7 @@ $f::
             send f
         }
     } else if (mode(_MODE.EDIT)) {
-        send ^{Home}
+        send f 
     } else if (mode(_MODE.RANGE)) {
         send +^{Home}
     } else if (mode(_MODE.MOUSE)) {
@@ -377,35 +379,68 @@ $g::
             setMode(_MODE.RANGE)
         }
     } else {
-        if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send ^g
-        } else {
-            if (isSecondKey()) {
-                send &
-            } else {
+            if (isSecondKeyAfterCtrlJ()) {
+                Gui, Font, CRed S20 Bold Q5, MSゴシック
+            Gui, Add, Button, default w200, &A:原神
+            Gui, Add, Button, w200, &S:崩壊3rd
+            Gui, Add, Button, w200, &D:FF14
+            Gui, Add, Button, w200, &F:パニグレ
+            Gui, Add, Button, w200, &G:アークナイツ
+            Gui, Add, Button, w200, &H:アズレン
+            Gui, Show, Center, Game
+            Return
+             
+            ButtonA:原神:
+                Run, "D:\Game\Genshin Impact game\GenshinImpact.exe"
+                Gui, Destroy
+                Return
+            ButtonS:崩壊3rd:
+    		    Run, "D:\Game\Houkai3rd\launcher.exe"
+                Gui, Destroy
+                Return
+            ButtonD:FF14:
+            	Run, "C:\Users\kuon\AppData\Local\XIVLauncher\XIVLauncher.exe"
+            	Gui, Destroy
+            	Return
+            ButtonF:パニグレ:
+            	Run, D:\Game\Nox\bin\Nox.exe -clone:nox -startPackage:com.herogame.gplay.punishing.grayraven.jp
+            	Gui, Destroy
+            	Return
+            ButtonG:アークナイツ:
+            	Run, D:\Game\Nox\bin\Nox.exe -clone:nox -startPackage:com.YoStarJP.Arknights
+            	Gui, Destroy
+            	Return
+            ButtonH:アズレン:
+            	Run, D:\Game\Nox\bin\Nox.exe -clone:nox -startPackage:com.YoStarJP.AzurLane
+            	Gui, Destroy
+            	Return
+             
+            } else if(isSecondKey()){
+                send {&}
+            }else{
                 send g
             }
-        }
     }
 return
 
-;[NORMAL ]: h (;からのコンビネーションの場合は~)(ObsidianでCtrl+jのあとならBacklink Search)
+;[NORMAL ]: hキー (Ctrj + jのあとは崩壊3rd起動）
 ;[EDIT   ]: 左に移動
 ;[RANGE  ]: 選択範囲を左に移動
 ;[MOUSE  ]: マウスポインタを左に微かに移動
-;[SPECIAL]: hキー
+;[SPECIAL]: 画面移動　左
 ;[DEBUG  ]: ステップアウト (SHIFT + F11)
 $h::
     if (mode(_MODE.NORMAL)) {
-        if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send {F17}
-        } else {
-            if (isSecondKey()) {
-                send ~
-            } else {
-                send h
-            }
-        }
+           	
+    	if(isSecondKeyAfterCtrlJ()){
+    		Run, "D:\Game\Houkai3rd\launcher.exe"
+        }else if(isSecondKey()){
+            send ~
+        }else{
+        
+			send h
+			
+		}
     } else if (mode(_MODE.EDIT)) {
         send {Left}
     } else if (mode(_MODE.RANGE)) {
@@ -413,7 +448,7 @@ $h::
     } else if (mode(_MODE.MOUSE)) {
         moveMouseLeftMicro()
     } else if (mode(_MODE.SPECIAL)) {
-        send h
+         MoveWindow("Left")
     } else if (mode(_MODE.DEBUG)) {
         send +{F11}
     }
@@ -523,7 +558,7 @@ return
 ;[EDIT   ]: MOUSEモードに変更
 ;[RANGE  ]: MOUSEモードに変更
 ;[MOUSE  ]: NORMALモードに変更
-;[SPECIAL]: 8キー
+;[SPECIAL]: 画面移動　上
 $i::
     if (mode(_MODE.NORMAL)) {
         if (isSecondKey()) {
@@ -540,11 +575,7 @@ $i::
     } else if (mode(_MODE.MOUSE)) {
         setMode(_MODE.NORMAL)
     } else if (mode(_MODE.SPECIAL)) {
-        if (isTerminal() || isUbuntu()) {
-            send 8
-        } else {
-            send {Numpad8}
-        }
+		MoveWindow("Up")
     }
 return
 
@@ -739,11 +770,7 @@ $k::
     } else if (mode(_MODE.MOUSE)) {
         moveMouseUpMicro()
     } else if (mode(_MODE.SPECIAL)) {
-        if (isTerminal() || isUbuntu()) {
-            send 5
-        } else {
-            send {Numpad5}
-        }
+			MoveWindow("Down")
     } else if (mode(_MODE.DEBUG)) {
         send {F10}
     }
@@ -818,7 +845,7 @@ return
 ;[EDIT   ]: 右に移動
 ;[RANGE  ]: 選択範囲を右に移動
 ;[MOUSE  ]: マウスポインタを右に微かに移動
-;[SPECIAL]: 6キー
+;[SPECIAL]: 画面移動　正面
 ;[SNIPPET]: :fork_and_knife:
 ;[DEBUG  ]: ステップイン (F11)
 $l::
@@ -842,11 +869,7 @@ $l::
     } else if (mode(_MODE.MOUSE)) {
         moveMouseRightMicro()
     } else if (mode(_MODE.SPECIAL)) {
-        if (isTerminal() || isUbuntu()) {
-            send 6
-        } else {
-            send {Numpad6}
-        }
+        MoveWindow("Right")
     } else if (mode(_MODE.SNIPPET)) {
         send :fork_and_knife:
     } else if (mode(_MODE.DEBUG)) {
@@ -948,7 +971,7 @@ $^!l::
     send ^#{Right}
 return
 
-;[NORMAL ]: mキー (コンビネーションキーの場合はダブルコーテーション)
+;[NORMAL ]: mキー (ctrl j gmail起動)
 ;[EDIT   ]: 日本語入力OFF + モードをNORMALに変更
 ;[RANGE  ]: 日本語入力OFF + モードをNORMALに変更
 ;[MOUSE  ]: 左ドラッグ
@@ -974,11 +997,13 @@ $m::
             send :fork_and_knife:
         }
     } else {
-        if (isSecondKey()) {
-            send "
-        } else {
-            send m
-        }
+        if (isSecondKeyAfterCtrlJ()){
+        	Run, https://mail.google.com/mail/u/0/?pli=1#inbox
+        	}else if(isSecondKey()){
+            send " 
+        }else{
+        	send m
+        	}
     }
 return
 
@@ -1065,7 +1090,7 @@ $^n::
     }
 return
 
-;[NORMAL ]: Shift + Nキー
+;[NORMAL ]: Shift + N
 ;[EDIT   ]: Shift + F3キー相当
 ;[RANGE  ]: Shift + F3キー相当
 ;[MOUSE  ]: Shift + F3キー相当
@@ -1079,7 +1104,7 @@ $+n::
 return
 
 ;----- [N]Delete [R]Delete(範囲指定終了) [M]右クリック押下 [M]ホイールダウン-----
-;[NORMAL ]: oキー(コンビネーションキーの場合は|)(ObsidianでCtrl+jのあとならアウトラインに移動する)
+;[NORMAL ]: oキー(ctrl j ブクマ)
 ;[EDIT   ]: DELキー
 ;[RANGE  ]: DELキー(処理後に範囲指定を終了する)
 ;[MOUSE  ]: マウスホイールを少し下に動かす
@@ -1093,22 +1118,57 @@ $o::
         } else if (mode(_MODE.MOUSE)) {
             scrollDownSmall()
         } else if (mode(_MODE.SPECIAL)) {
-            if (isTerminal() || isUbuntu()) {
-                send 9
-            } else {
-                send {Numpad9}
-            }
+            MoveWindow("RightDown")
         }
     } else {
-        if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send {F18}
-            return
-        }
-        if (isSecondKey()) {
-            imeOn := getIME()
-            setIME(false)
-            send |
-            setIME(imeOn)
+        if (isSecondKeyAfterCtrlJ()) {
+            Gui, Font, CRed S20 Bold Q5, MSゴシック
+            Gui, Add, Button, default w200, &A:エロゲ
+            Gui, Add, Button, w200, &S:FANZA
+            Gui, Add, Button, w200, &D:アニメストア
+            Gui, Add, Button, w200, &F:Asobistore
+            Gui, Add, Button, w200, &G:Iwara
+            Gui, Add, Button, w200, &H:DLsite
+            Gui, Add, Button, w200, &J:ニコニコ
+            Gui, Add, Button, w200, &K:booth
+            
+
+            Gui, Show, Center, Bookmark
+            Return
+            
+            ButtonA:エロゲ:
+            	Run, https://panapanapana.com/
+            	Gui, Destroy
+            	Return
+            ButtonS:FANZA:
+            	Run, https://dlsoft.dmm.co.jp/
+            	Gui, Destroy
+            	Return
+            ButtonD:アニメストア:
+            	Run, https://animestore.docomo.ne.jp/animestore/tp_pc
+            	Gui, Destroy
+            	Return
+            ButtonF:Asobistore:
+            	Run, https://shop.asobistore.jp/
+            	Gui, Destroy
+            	Return
+            ButtonG:Iwara:
+            	RUn, "C:\Program Files\Mozilla Firefox\firefox.exe" -url "https://ecchi.iwara.tv/"
+            	Gui, Destroy
+            	Return
+            ButtonH:DLsite:
+            	Run, https://onl.sc/gTZgbsZ
+            	Gui, Destroy
+            	Return
+            ButtonJ:ニコニコ:
+            	Run, https://x.gd/gzxCh
+            	Gui, Destroy
+            	Return
+            ButtonK:booth:
+            	Run, https://booth.pm/ja
+            	Gui, Destroy
+            	Return
+            	
         } else {
             send o
         }
@@ -1178,9 +1238,11 @@ $p::
             send p
         }
     } else {
-        if (isSecondKey()) {
+        if (isSecondKeyAfterCtrlJ()) {
+            Run, https://www.pixiv.net/
+        } else if(isSecondKey()) {
             send `%
-        } else {
+        }else{
             send p
         }
     }
@@ -1221,7 +1283,7 @@ $q::
         }
     } else {
         if (isSecondKey()) {
-            send ^+q
+            send !{F4}
         } else {
             send q
         }
@@ -1291,12 +1353,13 @@ $^r::
     }
 return
 
-;[NORMAL ]: sキー (コンビネーションキーの場合は()) (ObsidianでCtrl+jのあとならスターファイルを開く)
+;[NORMAL ]: sキー (ctrl j spotify)
 ;[EDIT   ]: Ctrl+Shift+S + NORMALモードへ (Dynalist: 展開/格納)(Google Chrome: Ctrl+Shift+c)
 ;[RANGE  ]: Ctrl+Shift+S + NORMALモードへ
 ;[MOUSE  ]: 中央下のエリアにフォーカスを移してNORMALモードに
 ;[SPECIAL]: アクティブウィンドウを中央下に最大化して移動する
 ;[DEBUG  ]: 停止
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $s::
     if (!mode(_MODE.NORMAL)) {
         if (mode(_MODE.EDIT)) {
@@ -1321,18 +1384,16 @@ $s::
             send ^{F2}
         }
     } else {
-        if (isActiveProcess("Obsidian") && isSecondKeyAfterCtrlJ()) {
-            send {F16}
-            return
-        }
-        if (isSecondKey()) {
+        if (isSecondKeyAfterCtrlJ()) {
+ 			Run, "C:\Users\kuon\AppData\Roaming\Spotify\Spotify.exe"
+        } else if(isSecondKey()) {
             imeOn := getIME()
             setIME(false)
             send ()
             setIME(imeOn)
             Sleep, 50
             send {Left}
-        } else {
+        }else{
             send s
         }
     }
@@ -1384,6 +1445,7 @@ $!s::
         send !s
     }
 return
+#ifwinnotactive
 
 ;[NORMAL ]: tキー (コンビネーションキーの場合は今日の日付、ハイフン区切り)
 ;[EDIT   ]: ウィンドウの移動
@@ -1395,12 +1457,83 @@ $t::
     if (!mode(_MODE.NORMAL)) {
         moveScreen()
     } else {
-        if (isSecondKey()) {
+       if(isSecondkeyAfterCtrlJ()){
+    	Gui, Font, CRed S20 Bold Q5, MSゴシック
+            Gui, Add, Button, default w200, &A:同人CG
+            Gui, Add, Button, w200, &S:同人誌
+            Gui, Add, Button, w200, &D:成年コミック
+            Gui, Add, Button, w200, &F:AV
+            Gui, Add, Button, w200, &G:アニメ
+            Gui, Add, Button, w200, &H:PCgame
+            Gui, Add, Button, w200, &J:個人撮影
+			Gui, Add, Button, w200, &K:ALL
+            Gui, Show, Center, Torrent
+            Return
+            
+            ButtonA:同人CG:
+            	
+
+            	Run, https://x.gd/hmAZh
+            	Gui, Destroy
+            	Return
+            	
+            
+            ButtonS:同人誌:
+            	Run, https://x.gd/mps8a
+            	Gui, Destroy
+            	Return
+            	
+            	
+            ButtonD:成年コミック:
+            	Run, https://x.gd/R5Ij4
+            	Gui, Destroy
+            	Return
+
+            ButtonF:AV:
+
+            	Run, https://x.gd/sHJfX
+            	Gui, Destroy
+            	Return
+            	
+            ButtonG:アニメ:
+            	Run, https://x.gd/8pvga
+            	Gui, Destroy
+            	Return
+            	
+            ButtonH:PCgame:
+            	Run, https://x.gd/WUVgG
+            	Gui, Destroy
+            	Return
+            	
+            ButtonJ:個人撮影:
+            	Run, https://x.gd/5YKMl
+            	Gui, Destroy
+            	Return
+            	
+            ButtonK:ALL:
+	            Run, https://x.gd/hmAZh
+	            Sleep, 300
+	            Run, https://x.gd/mps8a
+	            Sleep, 300
+	            Run, https://x.gd/R5Ij4
+	            Sleep, 300
+	            Run, https://x.gd/sHJfX
+	            Sleep, 300
+	            Run, https://x.gd/8pvga
+	            Sleep, 300
+	            Run, https://x.gd/WUVgG
+	            Sleep, 300
+            	Run, https://x.gd/5YKMl
+      
+            	Gui, Destroy
+            	Return
+    	}else if(isSecondKey()){
             Clipboard = %A_Year%-%A_Mon%-%A_MDay%
             Send, ^v
-        } else {
-            send t
-        }
+        
+        }else{
+	        send t
+	    }
     }
 return
 
@@ -1445,7 +1578,7 @@ $!t::
         send !t
     } else {
         if (isSecondKey()) {
-            Clipboard = %A_Year%-%A_Mon%-%A_MDay%T%A_Hour%:%A_Min%:%A_Sec%+09:00
+            Clipboard = %A_Year%%A_Mon%%A_MDay%%A_Hour%%A_Min%%A_Sec%
             Send, ^v
         } else {
             send !t
@@ -1469,11 +1602,7 @@ $u::
         } else if (mode(_MODE.MOUSE)) {
             scrollUpSmall()
         } else if (mode(_MODE.SPECIAL)) {
-            if (isTerminal() || isUbuntu()) {
-                send 7
-            } else {
-                send {Numpad7}
-            }
+          MoveWindow("LeftDown")
         } else if (mode(_MODE.SNIPPET)) {
             send :arrow_upper_right:
         }
@@ -1575,6 +1704,7 @@ return
 ;[MOUSE  ]: 中央上のエリアにフォーカスを移してNORMALモードに
 ;[SPECIAL]: アクティブウィンドウを中央上に最大化して移動する
 ;[DEBUG  ]: ブレークポイントトグル
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $w::
     if (mode(_MODE.NORMAL)) {
         if (isSecondKey()) {
@@ -1586,6 +1716,7 @@ $w::
             return
         }
         send w
+
     } else if (mode(_MODE.EDIT)) {
         send ^{Right}
     } else if (mode(_MODE.RANGE)) {
@@ -1600,12 +1731,13 @@ $w::
         send ^+b
     }
 return
-
+#ifWinnotActive
 ;[NORMAL ]: Shift + wキー
 ;[EDIT   ]: ウィンドウをデュアルサイズで最大化する
 ;[RANGE  ]: ウィンドウをデュアルサイズで最大化する
 ;[MOUSE  ]: ウィンドウをデュアルサイズで最大化する
 ;[SPECIAL]: ウィンドウをデュアルサイズで最大化する
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $+w::
     if (mode(_MODE.NORMAL)) {
         send +w
@@ -1619,6 +1751,7 @@ $+w::
         changeWindowSizeDualMax()
     }
 return
+#ifWinnotActive
 
 ;[NORMAL ]: xキー(コンビネーションから場合は【】）
 ;[EDIT   ]: Ctrl + xキー ＆ モードをVirtual->NORMALに変更
@@ -1645,7 +1778,7 @@ $x::
     }
 return
 
-;[NORMAL ]: yキー (コンビネーションの場合は ->)
+;[NORMAL ]: yキー (ctrl j youtube)
 ;[EDIT   ]: 元に戻すのをやめる
 ;[RANGE  ]: 元に戻すのをやめる
 ;[MOUSE  ]: 元に戻すのをやめる
@@ -1654,8 +1787,8 @@ $y::
     if (!mode(_MODE.NORMAL)) {
         send ^y
     } else {
-        if (isSecondKey()) {
-            send {space}->{space}
+        if (isSecondKeyAfterCtrlJ()) {
+            Run, https://www.youtube.com/
         } else {
             send y
         }
@@ -1669,9 +1802,49 @@ return
 ;[SPECIAL]: ウィンドウリサイズ特殊キー (コンビネーションの場合はリマインド)
 $z::
     if (mode(_MODE.NORMAL)) {
-        if (isSecondKey()) {
+       if (isSecondKeyAfterCtrlJ()) {
+            Gui, Font, CRed S20 Bold Q5, MSゴシック
+            Gui, Add, Button, default w200, Origin
+            Gui, Add, Button, w200, PC
+            Gui, Add, Button, w200, CG
+            Gui, Add, Button, w200, Doujin
+            Gui, Add, Button, w200, Image
+
+            Gui, Show, Center, ZipPla
+            Return
+            
+            ButtonOrigin:
+            	Run, D:\Application\ZipPla_Origin\ZipPla_origin.exe
+            	Gui, Destroy
+            	Return
+            	
+            
+            ButtonPC:
+            	Run, D:\Application\ZipPla_PC\ZipPla_PC.exe
+            	Gui, Destroy
+            	Return
+            ButtonCG:
+            	Run, D:\Application\ZipPla_CG\ZipPla_CG.exe
+            	Gui, Destroy
+            	Return
+            ButtonDoujin:
+            	Run, D:\Application\ZipPla_Doujin\ZipPla_Doujin.exe
+            	Gui, Destroy
+            	Return
+            ButtonImage:
+            	Run, D:\Application\ZipPla_Image\ZipPla_Image.exe
+            	Gui, Destroy
+            	Return
+            	
+            GuiEscape:
+            	Gui, Destroy
+            	return
+            GuiClose:
+            	Gui, Destroy
+            	return
+        } else if(isSecondKey()) {
             send {!}
-        } else {
+        }else{
             send z
         }
     } else if (mode(_MODE.SPECIAL)) {

@@ -78,12 +78,14 @@ $^3::
 ;[RANGE  ]: Alt+3  (Obsidianの場合、見出しレベル3)
 ;[MOUSE  ]: Alt+3  (Obsidianの場合、見出しレベル3)
 ;[SPECIAL]: Alt+3  (Obsidianの場合、見出しレベル3)
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $!3::
     if (isActiveProcess("Obsidian")) {
         send, {#}{#}{#}{space}
     }
     return
 
+#ifwinnotactive
 ;[NORMAL ]: 4キー
 ;[EDIT   ]: ウィンドウ最小化
 ;[RANGE  ]: ウィンドウ最小化
@@ -114,10 +116,10 @@ $!4::
 ;[RANGE  ]: { (中カッコ開始）
 ;[MOUSE  ]: { (中カッコ開始）
 ;[SPECIAL]: { (中カッコ開始）
+#ifWinnotActive, ahk_exe ffxiv_dx11.exe
 $^8::
     send {{}
     return
-
 
 ;[NORMAL ]: } (中カッコ終了）
 ;[EDIT   ]: } (中カッコ終了）
@@ -127,3 +129,4 @@ $^8::
 $^9::
     send {}}
     return
+#ifwinnotactive

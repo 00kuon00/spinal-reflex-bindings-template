@@ -1,9 +1,6 @@
 ﻿; 左のAltキーとwinがデフォルトで反対なので、入れ替え ;
-#ifwinnotactive ahk_class FFXIVGAME
-
 ;sc15B::sc038
 ;sc038::sc15B
-
 Ins::Del
 
 sc03A & 1::F1
@@ -27,7 +24,7 @@ sc03A & c::^c
 sc03A & d::^d
 ;sc03A & e::^e
 sc03A & f::^f
-;sc03A & g::^g
+sc03A & g::^g
 sc03A & h::^h
 sc03A & i::^i
 
@@ -35,7 +32,7 @@ sc03A & i::^i
 sc03A & j::
  return
 ;無効
-;sc03A & k::^k
+sc03A & k::^k
 
 sc03A & l::^l
 sc03A & m::^m
@@ -58,5 +55,3 @@ sc03A & sc027::^sc027
 
 ;;sc039=space
 sc03A & sc039::vkF3
-
-#ifwinnotactive

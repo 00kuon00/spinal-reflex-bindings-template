@@ -1,19 +1,20 @@
-﻿;******************************************************************
+﻿#ifWinnotActive,ahk_exe ffxiv_dx11.exe
+;******************************************************************
 ; 無変換
 ;******************************************************************
 
 ;----- モード切替 -----
-; 無変換キー
-$vk1C::
+;----- モード切替 -----
+; CAPSLOCK
+$sc03A::
     if (mode(_MODE.NORMAL)) {
         ;ここでsetIME(false)にしないのは 変換中のカーソル操作ができなくなってしまうため
-        setMode(_MODE.EDIT)
+       ; setMode(_MODE.EDIT)
     } else {
         setMode(_MODE.NORMAL)
         setIME(false)
     }
     return
-
 
 ;******************************************************************
 ; コントロール
@@ -162,6 +163,7 @@ $TAB::
 ;[RANGE  ]: Shift+TABキー + モードをNORMALに変更
 ;[MOUSE  ]: Shift+TABキー
 ;[SPECIAL]: Shift+TABキー
+#ifWinnotActive,ahk_exe ffxiv_dx11.exe
 $+TAB::
     if (!mode(_MODE.NORMAL)) {
         if (mode(_MODE.RANGE)) {
@@ -173,6 +175,7 @@ $+TAB::
     }
     return
 
+#ifwinnotactive
 
 ;[NORMAL ]: Ctrl + TABキー (Chromeのときは直近のタブに移動する)
 ;[EDIT   ]: Ctrl + TABキー (Chromeのときは直近のタブに移動する)
@@ -250,3 +253,4 @@ doMRr() {
 doMR() {
     send {RButton}
 }
+#ifwinnotactive

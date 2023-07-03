@@ -197,14 +197,14 @@ isConbinationKeyAndIMEOn(key) {
 ;【引数】なし
 ;【戻値】true: 押されている
 isSecondKey() {
-    return (A_PriorHotKey = "$;")
+    return (A_PriorHotKey = "$sc027")
 }
 
 ;【概要】現在押下されているキーがCtrl+jの後に押されたものかを返します。
 ;【引数】なし
 ;【戻値】true: 押されている
 isSecondKeyAfterCtrlJ() {
-    return (A_PriorHotKey = "$^j")
+    return (A_PriorHotKey = "sc03A & j")
 }
 
 ;【概要】マルチバイト文字列をsendします。

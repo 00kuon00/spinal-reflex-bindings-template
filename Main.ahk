@@ -2,7 +2,7 @@
 #NoEnv
 ; キーボードフックを使用する (押しっぱなし防止対策)
 #InstallKeybdHook
-
+#SingleInstance, Force
 #include %A_ScriptDir%\lib\IME.ahk
 #include %A_ScriptDir%\AppUtils.ahk
 #include %A_ScriptDir%\ModeController.ahk
@@ -23,4 +23,3 @@ SetMouseDelay, 10
 #include %A_ScriptDir%\keybindings\Symbols.ahk
 #include %A_ScriptDir%\keybindings\Others.ahk
 #include %A_ScriptDir%\keybindings\Remap.ahk
-
